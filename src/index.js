@@ -26,10 +26,12 @@
      * catch-handler nor a notify-handler.
      */
     function promiseMeSomethingCool(){
-      return askForForgiveness()
+      var promise = askForForgiveness()
         .then(function (result) {
           return result.data;
         });
+        
+      return promise;
     }
 
     /**
