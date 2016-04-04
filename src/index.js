@@ -25,10 +25,10 @@
      * notifications down the chain), we don't need to provide a
      * catch-handler nor a notify-handler.
      */
-    function promiseMeSomethingCool(){
-      var promise = askForForgiveness()
+    function promiseMeSomethingCool(willBeForgiven){
+      var promise = askForForgiveness(willBeForgiven)
         .then(function (result) {
-          return result.data;
+          return result.message;
         });
         
       return promise;
@@ -43,13 +43,13 @@
      * parameter to the handler-function, as we do with notify and
      * reject in this function. 
      */
-    function promiseMeSomethingRegular() {
+    function promiseMeSomethingRegular(willBeForgiven) {
       var deferred = $q.defer();
       
-      askForForgiveness()
+      askForForgiveness(willBeForgiven)
         .then(
           function(result) {
-            deferred.resolve(result.data);
+            deferred.resolve(result.message);
           },
           deferred.reject,
           deferred.notify);
@@ -57,14 +57,18 @@
       return deferred.promise;
     }
 
-    function askForForgiveness() {
+    function askForForgiveness(willBeForgiven) {
       var deferred = $q.defer();
 
       $timeout(function (){
-        deferred.notify('');
-        deferred.notify('test');
-        deferred.notify();
-        deferred.resolve({ data: 'broken' });
+        deferred.notify('Trying to forgive...');
+        deferred.notify('Trying hard to forgive...');
+        deferred.notify('Trying very hard to forgive...');
+        if (willBeForgiven) {
+          deferred.resolve({ message: 'You are forgiven' });
+        } else {
+          deferred.reject('I never promised you a rose garden');
+        }
       }, 0);
             
       return deferred.promise;

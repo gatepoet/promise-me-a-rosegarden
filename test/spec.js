@@ -32,12 +32,13 @@ describe('Calling a promised function', function() {
   };
 
   using(cases, function (funcName, desc) {
+       
     it(desc + ' transforms data', function() {
-      var expectedData = 'broken';
+      var promisedFunction = $brokenPromise[funcName];
+      var expectedData = 'You are forgiven';
       var result;
-      var promisedFunction = $brokenPromise[funcName]; 
       
-      promisedFunction()
+      promisedFunction(true)
         .then(function (data){
           result = data;
         });
@@ -48,10 +49,11 @@ describe('Calling a promised function', function() {
     });
     
     it(desc + ' notifies', function() {
+      var promisedFunction = $brokenPromise[funcName];
       var expectedNotifications = 3;
       var notifications = 0;
       
-      $brokenPromise.promiseMeSomethingCool()
+      promisedFunction(true)
         .then(
           undefined,
           fail,
@@ -62,6 +64,21 @@ describe('Calling a promised function', function() {
       $rootScope.$apply();
       
       expect(notifications).toEqual(expectedNotifications)
+    });  
+    
+    it(desc + ' handles errors', function() {
+      var promisedFunction = $brokenPromise[funcName];
+      var expectedError = 'I never promised you a rose garden';
+      var result;
+     
+      promisedFunction(false)
+        .catch(function(error) {
+          result = error;
+        });
+      $timeout.flush();
+      $rootScope.$apply();
+      
+      expect(result).toBe(expectedError);
     });  
   });
 });
