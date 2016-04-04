@@ -6,10 +6,11 @@
     .factory('brokenPromise', brokenPromise);
 
   brokenPromise.$inject = [
-    '$q'
+    '$q',
+    '$timeout'
   ];
   
-  function brokenPromise($q) {
+  function brokenPromise($q, $timeout) {
     return {
       promiseMeSomethingCool: promiseMeSomethingCool,
       promiseMeSomethingRegular: promiseMeSomethingRegular
@@ -57,7 +58,12 @@
     function askForForgiveness() {
       var deferred = $q.defer();
 
-      deferred.resolve({ data: 'broken' });
+      $timeout(function (){
+        deferred.notify('');
+        deferred.notify('test');
+        deferred.notify();
+        deferred.resolve({ data: 'broken' });
+      }, 0);
             
       return deferred.promise;
     }
