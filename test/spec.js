@@ -9,8 +9,9 @@ describe('Manhandling promises', function() {
   }));
   
   it('can return inside a promise', function(){
-    var expectedData = 'data';
+    var expectedData = 'broken';
     var result; 
+    
     $brokenPromise.promiseMeSomethingCool()
       .then(function (data){
         result = data;
@@ -20,8 +21,9 @@ describe('Manhandling promises', function() {
     expect(result).toEqual(expectedData);
   })
   it('can haz vanilla', function(){
-    var expectedData = 'data';
+    var expectedData = 'broken';
     var result; 
+    
     $brokenPromise.promiseMeSomethingRegular()
       .then(function (data){
         result = data;

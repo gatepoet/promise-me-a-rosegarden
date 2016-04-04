@@ -44,11 +44,12 @@
       var deferred = $q.defer();
       
       askForForgiveness()
-        .then(function(result) {
-          deferred.resolve(result.data);
-        })
-        .notify(deferred.notify)
-        .catch(deferred.reject);
+        .then(
+          function(result) {
+            deferred.resolve(result.data);
+          },
+          deferred.reject,
+          deferred.notify);
         
       return deferred.promise;
     }
