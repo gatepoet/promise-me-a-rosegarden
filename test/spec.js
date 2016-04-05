@@ -1,20 +1,3 @@
-function all(title, datas, func){
-  for (var i=0; i<datas.length; i++){
-    var data = datas[i];
-    it(
-      title + ' (' + (i+1) + ')',
-      function() { func(data); }
-    );
-  }
-  
-  function functionName(fun) {
-    var ret = fun.toString();
-    ret = ret.substr('function '.length);
-    ret = ret.substr(0, ret.indexOf('('));
-    return ret;
-  } 
-}
-
 describe('Calling a promised function', function() {
   var $brokenPromise, $rootScope;
   beforeEach(module('cheap.promises', function() {
@@ -48,22 +31,22 @@ describe('Calling a promised function', function() {
       expect(result).toEqual(expectedData);
     });
     
-    it(desc + ' notifies', function() {
+    it(desc + ' notifies three times', function() {
       var promisedFunction = $brokenPromise[funcName];
       var expectedNotifications = 3;
-      var notifications = 0;
+      var notifications = [];
       
       promisedFunction(true)
         .then(
           undefined,
           fail,
-          function() {
-            notifications++;
+          function(message) {
+            notifications.push(message);
           });        
       $timeout.flush();
       $rootScope.$apply();
       
-      expect(notifications).toEqual(expectedNotifications)
+      expect(notifications.length).toEqual(expectedNotifications)
     });  
     
     it(desc + ' handles errors', function() {
